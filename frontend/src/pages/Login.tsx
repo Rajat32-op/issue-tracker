@@ -20,7 +20,7 @@ export default function Login() {
     })
 
     setIsAuthenticated(true)
-    navigate("/dashboard")
+    navigate("/")
   }
 
   return (
