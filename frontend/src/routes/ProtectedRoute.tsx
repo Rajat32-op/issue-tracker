@@ -4,8 +4,14 @@ import { Loader2 } from "lucide-react"
 import { useAuth } from "../context/AuthContext"
 import type { JSX } from "react/jsx-dev-runtime"
 
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const { isAuthenticated, loading } = useAuth()
+const ProtectedRoute = ({
+  children,
+  requireAdmin = false,
+}: {
+  children: JSX.Element
+  requireAdmin?: boolean
+}) => {
+  const { isAuthenticated, loading, user } = useAuth()
 
   if (loading) {
     return (
@@ -27,6 +33,9 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   }
 
   if (!isAuthenticated) return <Navigate to="/login" />
+
+  if (requireAdmin && user?.role !== "ADMIN") return <Navigate to="/" />
+
   return children
 }
 

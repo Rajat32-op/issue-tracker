@@ -5,6 +5,7 @@ require("dotenv").config()
 
 const authRoutes = require("./routes/auth.js")
 const issueRoutes = require("./routes/issue.js")
+const adminRoutes = require("./routes/admin.js")
 
 const app = express()
 
@@ -18,6 +19,7 @@ app.use(cookieParser())
 
 app.use("/auth", authRoutes)
 app.use("/issues", issueRoutes)
+app.use("/admin", adminRoutes)
 
 app.listen(5000, () => {
   console.log("server running")

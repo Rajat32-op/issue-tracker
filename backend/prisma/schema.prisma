@@ -8,11 +8,12 @@ datasource db {
 }
 
 model Tenant {
-  id        String   @id @default(uuid())
-  name      String
-  users     User[]
-  issues    Issue[]
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  name        String
+  companyCode String   @unique
+  users       User[]
+  issues      Issue[]
+  createdAt   DateTime @default(now())
 }
 
 model User {
@@ -20,6 +21,8 @@ model User {
   email     String   @unique
   password  String
   tenantId  String
+  role      String   @default("MEMBER")
+  status    String   @default("PENDING")
   tenant    Tenant   @relation(fields: [tenantId], references: [id])
   issues    Issue[]  @relation("IssueCreator")
   createdAt DateTime @default(now())

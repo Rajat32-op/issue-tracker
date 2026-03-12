@@ -28,7 +28,7 @@ export default function Login() {
   const [error, setError] = useState("")
 
   const navigate = useNavigate()
-  const { setIsAuthenticated } = useAuth()
+  const { setIsAuthenticated, refreshUser } = useAuth()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -36,10 +36,11 @@ export default function Login() {
     setLoading(true)
     try {
       await api.post("/auth/login", { email, password })
+      await refreshUser()
       setIsAuthenticated(true)
       navigate("/")
-    } catch {
-      setError("Invalid email or password")
+    } catch (err: any) {
+      setError(err?.response?.data?.error || "Invalid email or password")
     } finally {
       setLoading(false)
     }

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 import api from "../api/axios"
 import IssueList from "../components/IssueList"
 import CreateIssue from "../components/CreateIssue"
-import { Zap, LogOut, Bug, CheckCircle2, Clock, AlertCircle, BarChart3 } from "lucide-react"
+import { Zap, LogOut, Bug, CheckCircle2, Clock, AlertCircle, BarChart3, Shield } from "lucide-react"
 import { useAuth } from "../context/AuthContext"
 
 const StatCard = ({
@@ -42,7 +42,7 @@ const StatCard = ({
 export default function Dashboard() {
   const [issues, setIssues] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
-  const { setIsAuthenticated } = useAuth()
+  const { setIsAuthenticated, setUser, user } = useAuth()
   const navigate = useNavigate()
 
   const fetchIssues = async () => {
@@ -65,6 +65,7 @@ export default function Dashboard() {
       await api.post("/auth/logout")
     } catch {}
     setIsAuthenticated(false)
+    setUser(null)
     navigate("/login")
   }
 
@@ -128,15 +129,28 @@ export default function Dashboard() {
             <span className="text-white font-bold text-lg tracking-tight">Issue Tracker</span>
           </div>
 
-          <motion.button
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-            onClick={handleLogout}
-            className="flex items-center gap-2 text-white/50 hover:text-white/90 text-sm font-medium transition-colors px-3 py-1.5 rounded-lg hover:bg-white/6"
-          >
-            <LogOut size={15} />
-            Logout
-          </motion.button>
+          <div className="flex items-center gap-3">
+            {user?.role === "ADMIN" && (
+              <motion.button
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+                onClick={() => navigate("/admin")}
+                className="flex items-center gap-2 text-white/50 hover:text-white/90 text-sm font-medium transition-colors px-3 py-1.5 rounded-lg hover:bg-white/6"
+              >
+                <Shield size={15} />
+                Admin
+              </motion.button>
+            )}
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-white/50 hover:text-white/90 text-sm font-medium transition-colors px-3 py-1.5 rounded-lg hover:bg-white/6"
+            >
+              <LogOut size={15} />
+              Logout
+            </motion.button>
+          </div>
         </div>
       </div>
 
