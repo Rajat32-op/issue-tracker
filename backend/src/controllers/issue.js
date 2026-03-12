@@ -27,3 +27,53 @@ exports.createIssue = async (req, res) => {
 
   res.json(issue)
 }
+
+exports.updateIssue = async (req, res) => {
+
+  const { id } = req.params
+  const { title, description, status } = req.body
+
+  try {
+
+    const issue = await prisma.issue.updateMany({
+      where: {
+        id: id,
+        tenantId: req.user.tenantId
+      },
+      data: {
+        title,
+        description,
+        status
+      }
+    })
+
+    if (issue.count === 0) {
+      return res.status(404).json({ error: "Issue not found" })
+    }
+
+    res.json({ message: "Issue updated" })
+
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+
+}
+
+exports.deleteIssue = async (req, res) => {
+
+  const { id } = req.params
+
+  const result = await prisma.issue.deleteMany({
+    where: {
+      id: id,
+      tenantId: req.user.tenantId
+    }
+  })
+
+  if (result.count === 0) {
+    return res.status(404).json({ error: "Issue not found" })
+  }
+
+  res.json({ message: "Issue deleted" })
+
+}
