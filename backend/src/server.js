@@ -10,7 +10,7 @@ const adminRoutes = require("./routes/admin.js")
 const app = express()
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: ["http://localhost:5173","https://merry-cassata-439a0d.netlify.app/"],
   credentials: true
 }))
 
